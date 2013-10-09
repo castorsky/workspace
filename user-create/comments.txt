@@ -1,1 +1,2 @@
 For correct work following modules are needed:
+cpan install OpenOffice::OODoc
