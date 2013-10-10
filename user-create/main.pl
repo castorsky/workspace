@@ -9,8 +9,8 @@ my $document = odfDocument(file => 'user-list.ods');
 my $rows = $document->getTableRows('userlist');
 my $table = $document->getTable('userlist', $columns, $rows);
 
-for ($i = 0; $i < $rows; $i++) {
-	my $testcell = $document->getCellValue($table, $i, 0);
-	$testcell =~ s/^(\S+)\s+(\S+).*/$2/;
+for ($row = 1; $row < $rows; $row++) {
+	my $testcell = $document->getCellValue($table, $row, 0);
+	$testcell =~ s/^(\S+)\s+(\S+)(\s|\.)(\S+).*/$4/;
 	if ($testcell) { print $testcell."\n"; };
 }
