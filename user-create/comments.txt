@@ -1,2 +1,4 @@
-For correct work following modules are needed:
-cpan install OpenOffice::OODoc
+Words in document has to be separated by spaces.
+For correct work following PERL modules are needed:
+OpenOffice::OODoc
+Lingua::Translit

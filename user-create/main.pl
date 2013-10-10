@@ -1,11 +1,16 @@
 #!/usr/bin/env perl
 
+#use Encode;
 use OpenOffice::OODoc;
+use Lingua::Translit;
 
+my $columns =  5;
 my $document = odfDocument(file => 'user-list.ods');
-my $table = $document->getTableList();
-my ($lines, $columns) = $document->getTableSize('userlist');
 my $rows = $document->getTableRows('userlist');
+my $table = $document->getTable('userlist', $columns, $rows);
 
-print $lines.' '.$columns."\n";
-print $rows;
+for ($i = 0; $i < $rows; $i++) {
+	my $testcell = $document->getCellValue($table, $i, 0);
+	$testcell =~ s/^(\S+)\s+(\S+).*/$2/;
+	if ($testcell) { print $testcell."\n"; };
+}
