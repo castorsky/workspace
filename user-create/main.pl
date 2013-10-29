@@ -22,7 +22,10 @@ sub generatePassword {
  } 
 
 for ($row = 1; $row < $rows; $row++) {
-	my $FIO = $document->getCellValue($table, $row, 0);
+	my $FIO = "";
+	my $Initials = "";
+	my $tempPassword = "";
+	$FIO = $document->getCellValue($table, $row, 0);
 	next if !$FIO;
 	$Name = $transl->translit($FIO);
 	# Some cyrillic letters appears as ` or y'
@@ -33,7 +36,7 @@ for ($row = 1; $row < $rows; $row++) {
 	my $FirstName = $&;
 	$Name =~ m/^[A-Za-z]+\s*[A-Za-z]+(\s|\.)\s*\K[A-Z](?=[a-z]*.*)/;
 	my $Patronimic = $&;
-	my $Initials = $LastName.$FirstName.$Patronimic;
+	$Initials = $LastName.$FirstName.$Patronimic;
 	$tempPasswd = generatePassword(8);
 	$document->cellValueType($table, $row, 1, 'string');
 	$document->cellValue($table, $row, 1, $Initials);
@@ -41,8 +44,9 @@ for ($row = 1; $row < $rows; $row++) {
 	$document->cellValue($table, $row, 2, $tempPasswd);
 	my $groupList = $document->getCellValue($table, $row, 3);
 	my $command = 'cl-useradd -c "'.$FIO.'" -g users -G "'.$groupList.'" -P	'.$Initials.' samba <<< "'.$tempPasswd.'"';
-	print $Initials." - ".$tempPasswd." - ".$groupList."\n";
-	print $command."\n";
+	# print $Initials." - ".$tempPasswd." - ".$groupList."\n";
+	my $res=qx/$command/;
+	print $res."\n";
 }
 
 $document->save;
