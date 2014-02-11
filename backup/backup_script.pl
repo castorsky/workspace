@@ -91,26 +91,30 @@ sub ListDirectory {
 foreach ($Current, $Previous, $Old) {
     if (!-d $_) { `mkdir -p $_`; }
 }
-
 if (($WeekDay == 0) && ($WeekNumber%2)) {
 	# Find full backup in PREVIOUS and move it to directory OLD.
 	my $list = ListDirectory("previous", "${PartialName}_full");
 	foreach my $name (keys %$list){
 		move("$Previous/$name","$Old/$name");
 	}
-	# Other files in PREVIOUS have to be deleted (except hidden files).
+	# Other archives in PREVIOUS have to be deleted (except hidden files).
 	opendir(my $dh, "$Previous/") or warn "Can't open the directory: $dh";
 	@filelist = readdir($dh);
-	foreach $file (@filelist) { if (!($file =~ m/(^\.)/)) {
-		unlink "$Previous/$file" or warn "Could not unlink $file: $!";
+	foreach my $file (@filelist) {
+		$_ = $file;
+		if (!m/(^\.)/ && m/${PartialName}/)
+		{
+			unlink "$Previous/$_" or warn "Could not unlink $_: $!";
 		}
 	}
 	closedir $dh;
 	# Move all files from CURRENT to PREVIOUS (except hidden files)
-	opendir ($dh1, "$Current");
+	opendir ($dh1, "$Current") or warn "Can't open the directory: $dh1";
 	@filelist = readdir($dh1);
-	foreach $file (@filelist) { if (!($file =~ m/(^\.)/)) {
-		move("$Current/$file", "$Previous/$file") or warn "Could not move $file: $!";
+	foreach my $file (@filelist) {
+		$_ = $file;
+		if (!m/(^\.)/ && m/${PartialName}/) {
+			move("$Current/$_", "$Previous/$file") or warn "Could not move $_: $!";
 		}
 	}
 	closedir $dh1;
