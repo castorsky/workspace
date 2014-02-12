@@ -23,7 +23,9 @@ $Current="$Dir/current";
 $Previous="$Dir/previous";
 $Old="$Dir/old";
 
-$Cmd = "/usr/bin/dar -Q -B $Dir/$PartialName.dcf";
+$Dar = qx{which dar};
+chomp($Dar);
+$Cmd = "$Dar -Q -B $Dir/$PartialName.dcf";
 
 # Remove old archives after N days
 $Rotate = 13*86400;
