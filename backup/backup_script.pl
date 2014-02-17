@@ -91,7 +91,9 @@ sub ListDirectory {
 # diff in PREVIOUS directory.
 ###############################################################################
 foreach ($Current, $Previous, $Old) {
-    if (!-d $_) { `mkdir -p $_`; }
+	if (!-d $_) {
+		qx{mkdir -p $_};
+	}
 }
 if (($WeekDay == 0) && ($WeekNumber%2)) {
 	# Find full backup in PREVIOUS and move it to directory OLD.
@@ -122,7 +124,8 @@ if (($WeekDay == 0) && ($WeekNumber%2)) {
 	closedir $dh1;
 	
 	# Create new full backup
-	`$Cmd -c $Current/${PartialName}_full_$Year$Month$Day`;
+	my $output = qx{$Cmd -c $Current/${PartialName}_full_$Year$Month$Day};
+	print $output;
 } else {
 	# Create new diff at CURRENT and delete the oldest diff at PREVIOUS
 	# Find full backup at CURRENT directory
@@ -135,10 +138,11 @@ if (($WeekDay == 0) && ($WeekNumber%2)) {
 
 	# If there are no full backup then create it.
 	if ($fname eq "") {
-		`$Cmd -c $Current/${PartialName}_full_$Year$Month$Day`;
+		my $output = qx{$Cmd -c $Current/${PartialName}_full_$Year$Month$Day};
 	} else {
-		`$Cmd -c $Current/${PartialName}_diff_$Year$Month$Day -A $Current/$fname`;
+		my $output = qx{$Cmd -c $Current/${PartialName}_diff_$Year$Month$Day -A $Current/$fname};
 	}
+	print $output;
 	
 	# Calculate current timestamp
 	my $timestamp = timelocal(0, 0, 0, $Day, $Month-1, $Year-1900);
