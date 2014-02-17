@@ -159,4 +159,3 @@ if (($WeekDay == 0) && ($WeekNumber%2)) {
 		}
 	}
 }
-
