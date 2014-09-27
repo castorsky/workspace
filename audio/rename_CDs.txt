@@ -1,0 +1,2 @@
+# Renames directories' names from CD1, CD2, ..., CDx to CD01, ..., CD0x
+find . -name "CD[0-9]*" -type d | while read NAME; do DIR=`echo "$NAME" | sed -re 's/CD([0-9])($|\s)/CD0\1/'`; mv "$NAME" "$DIR"; done
