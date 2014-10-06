@@ -1,0 +1,2 @@
+# Find and delete messages in /var/mail older than 41 weeks
+find . -Btime +41w -iname "[0-9]*" -delete
