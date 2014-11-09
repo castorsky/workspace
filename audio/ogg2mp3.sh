@@ -1,4 +1,9 @@
 #!/bin/bash
+# Check all needed executables
+if [ ! -e /usr/bin/oggdec ]; then echo "Install Vorbistools package."; exit 1; fi
+if [ ! -e /usr/bin/lame ]; then echo "Install LAME package."; exit 1; fi
+if [ ! -e /usr/bin/id3v2 ]; then echo "Install ID3V2 package."; exit 1; fi
+
 export OUTPREFIX="/data/OUTPUT"
 export DECODER="/usr/bin/oggdec"
 export ENCODER="/usr/bin/lame -b 192"
@@ -21,3 +26,5 @@ export -f convert_track
 MAXPROC=$(nproc)
 find . -iname "*.ogg" -print0 | \
   xargs -L 1 -P $MAXPROC -0 -I{} bash -c "convert_track \"{}\""
+
+exit 0
