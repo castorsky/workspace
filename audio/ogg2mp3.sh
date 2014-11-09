@@ -3,6 +3,9 @@
 if [ ! -e /usr/bin/oggdec ]; then echo "Install Vorbistools package."; exit 1; fi
 if [ ! -e /usr/bin/lame ]; then echo "Install LAME package."; exit 1; fi
 if [ ! -e /usr/bin/id3v2 ]; then echo "Install ID3V2 package."; exit 1; fi
+CYR_SUPPORT=`iconv -l | grep -c "CP1251"`
+if [ $CYR_SUPPORT = "0" ]; then echo "ICONV cannot convert to CP1251"; exit 1; fi
+
 
 export OUTPREFIX="/data/OUTPUT"
 export DECODER="/usr/bin/oggdec"
@@ -12,7 +15,7 @@ convert_track() {
     COMMENTS=$(vorbiscomment -l "$1")
     for TAG in TITLE ARTIST ALBUM ALBUMARTIST DATE TRACKNUMBER TRACKTOTAL GENRE DISCID
     do
-        export TAG_$TAG="$(echo "$COMMENTS" | grep ^"${TAG}=" | awk -F "=" '{print $2}')"
+        export TAG_$TAG="$(echo "$COMMENTS" | grep ^"${TAG}=" | awk -F "=" '{print $2}' | iconv -f UTF8 -t CP1251)"
     done
     echo "Processing file: $1"
     BASE=`basename "$1" .ogg`
