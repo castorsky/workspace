@@ -16,7 +16,7 @@ else
   echo "Target directory ${BASE_DIR}/elrepo not present."
 fi
 
-if [ -d ${BASE_DIR}/epel/6 ] ; then
+if [ -d ${BASE_DIR}/epel/${EPEL_RELEASE} ] ; then
   rsync -avSHP --delete --exclude "SRPMS" --exclude "ppc64" --exclude "*/debug/*" mirror.logol.ru::epel/${EPEL_RELEASE}/ ${BASE_DIR}/epel/${EPEL_RELEASE}/
 else
   echo "Target directory ${BASE_DIR}/epel/${EPEL_RELEASE} not present."
