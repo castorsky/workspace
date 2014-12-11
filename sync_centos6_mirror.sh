@@ -21,3 +21,10 @@ if [ -d ${BASE_DIR}/epel/6 ] ; then
 else
   echo "Target directory ${BASE_DIR}/epel/${EPEL_RELEASE} not present."
 fi
+
+REPO="rpmfusion"
+if [ -d ${BASE_DIR}/${REPO}/ ] ; then
+  rsync -avSHP --delete --exclude "*/debug/*" --exclude "*/SRPMS/*" --exclude "*/5/*" --exclude "*/testing/*" --exclude "*free/fedora*" mirror.yandex.ru::fedora/${REPO}/ ${BASE_DIR}/${REPO}/
+else
+  echo "Target directory ${BASE_DIR}/${REPO}/ not present."
+fi
