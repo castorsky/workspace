@@ -1,4 +1,5 @@
 #!/bin/sh
+
 # Check all needed executables
 if [ ! -e /usr/bin/flac ]; then echo "Install FLAC package."; exit 1; fi
 if [ ! -e /usr/bin/oggenc ]; then echo "Install Vorbistools package."; exit 1; fi
@@ -10,11 +11,11 @@ export TAGLIST="TITLE ARTIST ALBUM ALBUMARTIST DATE TRACKNUMBER TRACKTOTAL GENRE
 show_help() {
 cat << EOF
 Usage: ${0##*/} [-hiq]
-Convert all files in current directory (recursively) from FLAC to Ogg Vorbis.
+Convert all files in current directory (recursively) from FLAC/Ogg to Ogg Vorbis.
 WARNING! Original files will be deleted!
     -h          display this help and exit
     -i          enable conversion to CP-1251 codepage
-    -q          set quality of Ogg file (default = 8)
+    -q          set quality of output Ogg file (default = 8)
 EOF
 }
 
@@ -22,12 +23,24 @@ EOF
 convert_file() {
     # If script was triggered with -i parameter enable conversion
     echo "Converting file $1"
+    # Detect filetype
+    EXT=`basename "$1" | sed -E 's/.*\.([A-Za-z0-9]{1,})/\1/'`
+    DECODE=""
+    COMMENTS=""
+    case $EXT in
+        ogg)
+            DECODE="oggdec \"$1\" -Q -o -"
+            COMMENTS=$(vorbiscomment -l "$1")
+            ;;
+        flac)
+            DECODE="flac -sdc \"$1\""
+            COMMENTS=$(metaflac --export-tags-to=- "$1")
+            ;;
+    esac
     if [ $CYRILLIC == 1 ]; then
-        COMMENTS=$(metaflac --export-tags-to=- "$1" | iconv -f UTF8 -t CP1251)
-    else
-        COMMENTS=$(metaflac --export-tags-to=- "$1")
+        COMMENTS=$(echo "$COMMENTS" | iconv -f UTF8 -t CP1251)
     fi
-    TRACK=$(dirname "$1")"/"$(basename "$1" .flac)".ogg"
+    TRACK=$(dirname "$1")"/"$(basename "$1" .$EXT)
     for TAGID in $TAGLIST; do
         declare "TAG_$TAGID=$(echo "$COMMENTS" | grep -i ^"${TAGID}=" | awk -F "=" '{print $2}')"
         THIS="TAG_$TAGID"
@@ -36,12 +49,13 @@ convert_file() {
         fi
     done
     LISTING=$(echo "$LISTING" | sed -e 's/^$//g')
-    flac -sdc "$1" | oggenc -Q -q $QUALITY -o "$TRACK" -
+    eval $DECODE | oggenc -Q -q $QUALITY -o "$TRACK.new" -
     # Vorbiscomment decline other methods of processing parameters for me
-    vorbiscomment -w "$TRACK" << EOF
+    vorbiscomment -w "$TRACK.new" << EOF
 $LISTING
 EOF
     rm -f "$1"
+    mv "$TRACK.new" "$TRACK.ogg"
 }
 
 # Read (if any) options from command line
@@ -73,5 +87,5 @@ fi
 
 export -f convert_file
 MAXPROC=$(nproc)
-find . -iname "*.flac" -print0 | \
+find . -iname "*.ogg" -print0 -o -iname "*.flac" -print0 | \
   xargs -L 1 -P $MAXPROC -0 -I{} bash -c "convert_file \"{}\""
