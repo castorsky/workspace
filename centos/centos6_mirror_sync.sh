@@ -2,7 +2,7 @@
 CENTOS_RELEASE="6.6"
 ELREPO_EXCLUDE_RELEASE="7"
 EPEL_RELEASE="6"
-BASE_DIR="/srv/localmirror"
+BASE_DIR="/data/localmirror"
 
 if [ -d ${BASE_DIR}/centos/${CENTOS_RELEASE} ] ; then
   rsync -avSHP --delete --exclude "SCL" --exclude "cr" --exclude "xen4" --exclude "isos" mirror.yandex.ru::centos/${CENTOS_RELEASE}/ ${BASE_DIR}/centos/${CENTOS_RELEASE}/

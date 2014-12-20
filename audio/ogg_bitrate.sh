@@ -20,5 +20,3 @@ export -f convert_file
 MAXPROC=$(nproc)
 find . -iname "*.ogg" -print0 | \
   xargs -L 1 -P $MAXPROC -0 -I{} bash -c "convert_file \"{}\""
-
-# for A in *; do mv "$A" "`echo $A | sed -E 's/^[0-9]{,2} - //'`"; done

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-BASE_DIR="/srv/localmirror"
+BASE_DIR="/data/localmirror"
 ADOBE_REPOS="adobe-linux-i386 adobe-linux-x86_64"
 ADOBE_DIR="${BASE_DIR}/adobe"
 
