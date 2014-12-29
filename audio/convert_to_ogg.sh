@@ -58,7 +58,7 @@ convert_file() {
         fi
     done
     LISTING=$(echo "$LISTING" | sed -e 's/^$//g')
-    eval $DECODE | oggenc -Q -q $QUALITY -o "$TRACK.new" -
+    eval "$DECODE" | oggenc -Q -q $QUALITY -o "$TRACK.new" -
 
     # Vorbiscomment declines other methods of processing parameters for me
     vorbiscomment -w "$TRACK.new" << EOF
