@@ -21,12 +21,18 @@ EOF
 
 # Main function
 convert_file() {
+    # Case insensitive script. Some W*****s users name files like Track.Flac or track.FLAC
+    shopt -s nocasematch
+
     # If script was triggered with -i parameter enable conversion
     echo "Converting file $1"
+
     # Detect filetype
     EXT=`basename "$1" | sed -E 's/.*\.([A-Za-z0-9]{1,})/\1/'`
     DECODE=""
     COMMENTS=""
+
+    # Choose decoder for particular filetype
     case $EXT in
         ogg)
             DECODE="oggdec \"$1\" -Q -o -"
@@ -37,9 +43,12 @@ convert_file() {
             COMMENTS=$(metaflac --export-tags-to=- "$1")
             ;;
     esac
+
+    # Convert tags to cyrillc codepage
     if [ $CYRILLIC == 1 ]; then
         COMMENTS=$(echo "$COMMENTS" | iconv -f UTF8 -t CP1251)
     fi
+
     TRACK=$(dirname "$1")"/"$(basename "$1" .$EXT)
     for TAGID in $TAGLIST; do
         declare "TAG_$TAGID=$(echo "$COMMENTS" | grep -i ^"${TAGID}=" | awk -F "=" '{print $2}')"
@@ -50,7 +59,8 @@ convert_file() {
     done
     LISTING=$(echo "$LISTING" | sed -e 's/^$//g')
     eval $DECODE | oggenc -Q -q $QUALITY -o "$TRACK.new" -
-    # Vorbiscomment decline other methods of processing parameters for me
+
+    # Vorbiscomment declines other methods of processing parameters for me
     vorbiscomment -w "$TRACK.new" << EOF
 $LISTING
 EOF
