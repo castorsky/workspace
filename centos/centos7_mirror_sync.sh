@@ -1,8 +1,9 @@
 #!/bin/bash
-CENTOS_RELEASE="7.0.1406"
+CENTOS_RELEASE="7"
 ELREPO_EXCLUDE_RELEASE="6"
 EPEL_RELEASE="7"
-BASE_DIR="/data/localmirror"
+BASE_DIR="/srv/localmirror"
+NUX_RELEASE="el7"
 
 if [ -d ${BASE_DIR}/centos/${CENTOS_RELEASE} ] ; then
   rsync -avSHP --delete --exclude "isos" mirror.yandex.ru::centos/${CENTOS_RELEASE}/ ${BASE_DIR}/centos/${CENTOS_RELEASE}/
@@ -21,3 +22,8 @@ if [ -d ${BASE_DIR}/epel/${EPEL_RELEASE} ] ; then
 else
   echo "Target directory ${BASE_DIR}/epel/${EPEL_RELEASE} not present."
 fi
+
+if [ -d ${BASE_DIR}/nux/dextop/${NUX_RELEASE} ] ; then
+  rsync -avSHP --delete --exclude "SRPMS" --exclude "tmp" li.nux.ro::li.nux.ro/nux/dextop/${NUX_RELEASE}/ ${BASE_DIR}/nux/dextop/${NUX_RELEASE}
+else
+  echo "Target firectory ${BASE_DIR}/nux/dextop/${NUX_RELEASE} not present."
