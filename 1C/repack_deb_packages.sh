@@ -1,4 +1,9 @@
 #!/bin/bash
+if [[ ! -f /usr/bin/rename ]]; then
+	echo -e "RENAME utility not found. Install it with\n$ sudo apt install rename\nand try again."
+	exit
+fi
+
 if [[ $# -eq 0 ]]
 then
 	echo "Usage: scrpit.sh [directory_with_packages]"
@@ -28,13 +33,17 @@ do
 	if [[ -d "${DIR}/${PACKAGE}/opt/1C/v8.3" ]]; then
 		mv "${DIR}/${PACKAGE}/opt/1C/v8.3" "${DIR}/${PACKAGE}/opt/1C/v${VERSION}" 
 	fi
-    if [[ -d "${DIR}/${PACKAGE}/usr/share/icons" ]]; then
-        rm -rf "${DIR}/${PACKAGE}/usr/share/icons"
-	fi
-    if [[ -d "${DIR}/${PACKAGE}/etc" ]]; then
-        rm -rf "${DIR}/${PACKAGE}/etc"
-    fi
+	# Delete all icons
+        if [[ -d "${DIR}/${PACKAGE}/usr/share/icons" ]]; then
+            rm -rf "${DIR}/${PACKAGE}/usr/share/icons"
+    	fi
+    	# Delete /etc folder
+        if [[ -d "${DIR}/${PACKAGE}/etc" ]]; then
+            rm -rf "${DIR}/${PACKAGE}/etc"
+        fi
+        # Delete all non-control files in DEBIAN folder
 	find ${DIR}/${PACKAGE}/DEBIAN/ ! -iname "control" -iname "*" -type f -delete
+	# Rename and edit *.desktop links
 	if [[ -d ${DIR}/${PACKAGE}/usr/share/applications ]]; then
 		rename "s/(.*)(\.desktop)/\1_${VERSION}\2/" ${DIR}/${PACKAGE}/usr/share/applications/*.desktop &>/dev/null
 		sed -i -E "s/(v8.3|Enterprise|Предприятие)/v${VERSION}/g" ${DIR}/${PACKAGE}/usr/share/applications/*.desktop
