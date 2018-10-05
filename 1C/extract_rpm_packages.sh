@@ -50,7 +50,7 @@ do
 	rm -rf "${PACKAGE}/"
 	echo " done. Repacked into $NEWPACKAGE."
 	rm -rf "$FILE"
-	cd -
+	cd - &>/dev/null
 done
 
 echo "Processing additional packages..."
@@ -83,4 +83,4 @@ done
 rm -rf "auxpkgs/temp"
 tar -czpf "1C-auxlibs-$VERS1C.tar.gz" -C "auxpkgs/" .
 rm -rf "auxpkgs"
-cd -
+cd - &>/dev/null
