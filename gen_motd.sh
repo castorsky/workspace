@@ -1,6 +1,6 @@
 #!/bin/bash
-#
-#
+# Original link
+# http://midactstech.blogspot.com/2013/11/how-to-add-color-to-your-motd.html
 # Message of the Day filename
 MOTD="/etc/motd"
 

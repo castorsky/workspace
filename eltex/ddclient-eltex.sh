@@ -1,7 +1,7 @@
 #!/bin/bash
 USER=user
 PWD=user
-IP=192.168.73.1
+IP=192.168.33.1
 
 LOGINURL="http://${IP}/login?username=${USER}&password=${PWD}"
 INFOURL="http://${IP}/wancfg.cmd?action=view&type=detail"
