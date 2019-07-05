@@ -45,8 +45,13 @@ do
 	find ${DIR}/${PACKAGE}/DEBIAN/ ! -iname "control" -iname "*" -type f -delete
 	# Rename and edit *.desktop links
 	if [[ -d ${DIR}/${PACKAGE}/usr/share/applications ]]; then
-		rename "s/(.*)(\.desktop)/\1_${VERSION}\2/" ${DIR}/${PACKAGE}/usr/share/applications/*.desktop &>/dev/null
-		sed -i -E "s/(v8.3|Enterprise|Предприятие)/v${VERSION}/g" ${DIR}/${PACKAGE}/usr/share/applications/*.desktop
+		for FNAME in "${DIR}/${PACKAGE}"/usr/share/applications/*.desktop; do
+			NEWNAME=`echo $FNAME | sed -E "s/(.*)(\.desktop)/\1_${VERSION}\2/"`
+			mv "$FNAME" "$NEWNAME"
+			sed -i -E "s/(v8.3|Enterprise|Предприятие)/v${VERSION}/g" $NEWNAME
+		done
+#		rename "s/(.*)(\.desktop)/\1_${VERSION}\2/" ${DIR}/${PACKAGE}/usr/share/applications/*.desktop &>/dev/null
+#		sed -i -E "s/(v8.3|Enterprise|Предприятие)/v${VERSION}/g" ${DIR}/${PACKAGE}/usr/share/applications/*.desktop
 	fi
 	dpkg-deb -b ${DIR}/${PACKAGE} ${DIR}/${NEWPACKAGE}
 done
