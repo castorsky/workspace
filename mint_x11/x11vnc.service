@@ -1,0 +1,9 @@
+#/lib/systemd/system/x11vnc.service
+[Unit]
+Description=Start x11vnc at startup.
+After=multi-user.target
+[Service]
+Type=simple
+ExecStart=/usr/bin/x11vnc -rfbauth /root/.config/vncpasswd -noxdamage -shared -dontdisconnect -many -noxfixes -display :0 -auth /var/run/lightdm/root/:0
+[Install]
+WantedBy=multi-user.target
