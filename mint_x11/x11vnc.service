@@ -4,6 +4,7 @@ Description=Start x11vnc at startup.
 After=multi-user.target
 [Service]
 Type=simple
-ExecStart=/usr/bin/x11vnc -rfbauth /root/.config/vncpasswd -noxdamage -shared -dontdisconnect -many -noxfixes -display :0 -auth /var/run/lightdm/root/:0 -loop
+ExecStart=/usr/bin/x11vnc -rfbauth /root/.config/vncpasswd -noxdamage -shared -dontdisconnect -many -noxfixes -display :0 -auth /var/run/lightdm/root/:0 -loop -ncache 10
+ExecStop=/usr/bin/killall x11vnc
 [Install]
 WantedBy=multi-user.target
