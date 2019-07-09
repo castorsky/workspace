@@ -1,0 +1,22 @@
+#!/bin/bash
+
+SPOOL=/var/spool/usbip/bind
+
+if [[ $1 == "-q" ]]
+then
+    exec &>/dev/null
+fi
+
+touch $SPOOL
+
+while [[ -e $SPOOL ]]
+do
+  /usr/sbin/usbip bind -b 1-8
+  /usr/sbin/usbip bind -b 1-13
+  sleep 10
+done
+
+/usr/sbin/usbip unbind -b 1-8
+/usr/sbin/usbip unbind -b 1-13
+
+exit 0
