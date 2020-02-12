@@ -1,0 +1,21 @@
+--- xinit.old/Xclients	2018-04-11 04:24:56.000000000 +0800
++++ xinit/Xclients	2020-02-06 17:53:15.000000000 +0800
+@@ -11,4 +11,5 @@
+ GSESSION="$(type -p gnome-session)"
+ STARTKDE="$(type -p startkde)"
++MSESSION="$(type -p mate-session)"
+ 
+ # check to see if the user has a preferred desktop
+@@ -18,7 +19,11 @@
+     if [ "$DESKTOP" = "GNOME" ]; then
+ 	PREFERRED="$GSESSION"
+-    elif [ "$DESKTOP" = "KDE" ]; then
++    fi
++    if [ "$DESKTOP" = "KDE" ]; then
+ 	PREFERRED="$STARTKDE"
+     fi
++    if [ "$DESKTOP" = "MATE" ]; then
++        PREFERRED="$MSESSION"
++    fi
+ fi
+ 
