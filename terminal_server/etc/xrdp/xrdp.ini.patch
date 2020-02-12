@@ -1,0 +1,23 @@
+--- xrdp.old/xrdp.ini	2019-12-29 12:21:06.000000000 +0800
++++ xrdp.new/xrdp.ini	2020-02-12 15:13:02.929000000 +0800
+@@ -179,12 +179,12 @@
+ ; Startup command-line parameters for the display server are configured
+ ; in sesman.ini. See and configure also sesman.ini.
+-#[Xorg]
+-#name=Xorg
+-#lib=libxup.so
+-#username=ask
+-#password=ask
+-#ip=127.0.0.1
+-#port=-1
+-#code=20
++[Xorg]
++name=Xorg
++lib=libxup.so
++username=ask
++password=ask
++ip=127.0.0.1
++port=-1
++code=20
+ 
+ [Xvnc]
