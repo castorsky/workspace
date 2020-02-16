@@ -1,0 +1,13 @@
+[Midnight-Commander]
+confirm_exit=0
+drop_menus=1
+skin=default
+
+[Layout]
+message_visible=0
+keybar_visible=0
+output_lines=0
+menubar_visible=0
+
+[Panels]
+navigate_with_arrows=true
