@@ -1,0 +1,6 @@
+[org.mate.interface]
+gtk-theme='Mint-Y'
+icon-theme='Mint-Y'
+
+[org.mate.Marco.general]
+theme='Mint-Y'
