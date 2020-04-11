@@ -20,7 +20,7 @@ adjust_levels() {
 	# $1 = image file
 	DIR=`dirname $1`
 	NAME=`basename $1 .${FORMAT}`
-	$CONVERT "$DIR/$NAME.$FORMAT" -level "$LEVELS" "$DIR/${NAME}_adjusted.$FORMAT"
+	$CONVERT "$DIR/$NAME.$FORMAT" -quality "95%" -level "$LEVELS" "$DIR/${NAME}_adjusted.$FORMAT"
 }
 export -f adjust_levels
 find . -iname "*.$FORMAT" -print0 | \
