@@ -10,18 +10,18 @@ FORMAT=$1
 export FORMAT
 CONVERT=`type -p convert`
 export CONVERT
-# First = black point, second = white point
-# Third = gamma value
-#LEVELS="23,70%,1.1" - Libero Autodata manual
-LEVELS="23%,90%,0.7"
-export LEVELS
+
+METHOD="-grayscale Rec709Luminance -level 23%,70%,1.1" # Libero 1993 manual
+#METHOD="-quality 95% -level 23%,90%,0.7" # Javabook
+export METHOD
+
 if [ -z $CONVERT ]; then echo "Is ImageMagick installed?"; exit 1; fi
 
 adjust_levels() {
 	# $1 = image file
 	DIR=`dirname $1`
 	NAME=`basename $1 .${FORMAT}`
-	$CONVERT "$DIR/$NAME.$FORMAT" -quality "95%" -level "$LEVELS" "$DIR/${NAME}_adjusted.$FORMAT"
+	$CONVERT "$DIR/$NAME.$FORMAT" $METHOD "$DIR/${NAME}_adjusted.$FORMAT"
 }
 export -f adjust_levels
 find . -iname "*.$FORMAT" -print0 | \
