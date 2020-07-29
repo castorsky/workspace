@@ -12,6 +12,7 @@ CONVERT=`type -p convert`
 export CONVERT
 # First = black point, second = white point
 # Third = gamma value
+#LEVELS="23,70%,1.1" - Libero Autodata manual
 LEVELS="23%,90%,0.7"
 export LEVELS
 if [ -z $CONVERT ]; then echo "Is ImageMagick installed?"; exit 1; fi
