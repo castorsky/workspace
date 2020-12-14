@@ -1,0 +1,23 @@
+#
+# /etc/polkit-default-privs.local
+#
+# This file is used by the set_polkit_default_privs tool to generate polkit
+# rules. It is meant for local overrides of the active profile (defined in
+# /etc/sysconfig/security) by the administrator of the system: any definitions
+# here take precedence over the distribution defaults in
+# /etc/polkit-default-privs.<profile>.
+#
+# The syntax for this file is defined in polkit-default-privs(5). Note that you
+# need to run /sbin/set_polkit_default_privs for changes to take effect.
+org.freedesktop.network-manager-settings.system.modify          auth_admin_keep_always:auth_admin:yes
+org.freedesktop.network-manager-settings.system.hostname.modify auth_admin_keep
+org.freedesktop.NetworkManager.enable-disable-network           auth_admin:auth_admin:yes
+org.freedesktop.NetworkManager.use-user-connections             auth_admin:auth_admin:yes
+# auth_admin probably causes issues with suspend here (bnc#716291)
+org.freedesktop.NetworkManager.network-control                  yes:auth_admin_keep:yes
+org.freedesktop.NetworkManager.settings.modify.own              yes:auth_admin_keep:yes
+org.freedesktop.NetworkManager.settings.modify.system           auth_admin_keep
+org.freedesktop.NetworkManager.settings.modify.hostname         auth_admin
+org.freedesktop.NetworkManager.settings.modify.global-dns       auth_admin_keep:auth_admin_keep:auth_admin_keep
+
+org.freedesktop.packagekit.system-sources-refresh               yes:no:yes
