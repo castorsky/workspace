@@ -1,0 +1,23 @@
+[Unit]
+Description=1C:Enterprise Remote Administration Service (%I)
+After=network.target remote-fs.target nss-lookup.target
+
+Requires=srv1cv83@%i.service
+
+[Service]
+Type=simple
+User=usr1cv8
+Group=grp1cv8
+
+Environment=SRV1CV8_RAS_PORT=1545
+
+ExecStart=/bin/sh -c "/opt/1cv8/x86_64/%I/ras cluster --port=${SRV1CV8_RAS_PORT}"
+
+KillSignal=SIGINT
+PrivateTmp=true
+Restart=on-failure
+RestartSec=5
+
+[Install]
+DefaultInstance=current
+WantedBy=multi-user.target
