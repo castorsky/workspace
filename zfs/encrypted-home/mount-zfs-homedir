@@ -1,0 +1,14 @@
+#!/bin/bash
+
+set -eu
+
+USER=$PAM_USER
+PASS=$(cat -)
+VOLNAME="rpool/home/$USER"
+KEY=$(/sbin/zfs get -o value keystatus -H $VOLNAME)
+if [ "available" != $KEY ]; then
+    /sbin/zfs load-key "$VOLNAME" <<< "$PASS" || continue
+    /usr/bin/mount "/home/$USER"
+fi
+
+exit 0
